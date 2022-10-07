@@ -1,28 +1,40 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "./dist/",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
     "target": "esnext",
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "src/*": ["./src/*"]
     },
+    "rootDir": "./src",
+    "outDir": "./dist",
     "allowJs": true,
-    "esModuleInterop": true,
     "jsx": "react-native",
     "lib": ["es2017"],
     "isolatedModules": true,
     "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
     "noEmit": true,
     "strict": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
     // 라이브러리 *.d.ts로 설정된 파일의 type checking은 skipt함.
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
   "exclude": [
     "node_modules",
     "babel.config.js",
     "metro.config.js",
-    "jest.config.js",
-    "webpack.config.js"
+    "jest.config.js"
   ]
 }

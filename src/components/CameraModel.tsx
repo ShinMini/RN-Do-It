@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import {View, StyleSheet} from 'react-native';
-import Camera from 'react-native-camera-kit';
-import {CameraType} from 'react-native-camera-kit';
-import {styles} from '../styles/CameraStyles';
+import {View} from 'react-native';
+import Camera, {CameraType} from 'react-native-camera-kit';
+import cameraStyles from 'src/styles/CameraStyles';
 
-export default class CameraNode extends Component {
+export default class CameraExample extends Component {
   camera: any;
   render() {
     return (
-      <View style={styles.cameraContainer}>
+      <View style={cameraStyles.cameraContainer}>
         <Camera
           ref={this.camera}
           style={{flex: 1}}
