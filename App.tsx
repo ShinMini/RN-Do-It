@@ -1,62 +1,128 @@
 /** @format */
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { StyleSheet, Image, Text, View, Button } from "react-native";
-import Navigation from "./src/components/Navigation";
-import sampleImage1 from "./assets/images/sample1.png";
-import sampleImage2 from "./assets/images/sample2.png";
-import sampleImage3 from "./assets/images/sample3.png";
+import React, { useState, useEffect, useRef } from "react";
+import { Camera } from "expo-camera";
+import { shareAsync } from "expo-sharing";
+import * as MediaLibrary from "expo-media-library";
+import {
+  StyleSheet,
+  SafeAreaView,
+  Image,
+  Text,
+  View,
+  Button,
+} from "react-native";
 
 export default function App() {
-  const imageArr = [sampleImage1, sampleImage2, sampleImage3];
-  const paragraphArr: string[] = [
-    "기본 텍스트1",
-    "기본 텍스트2",
-    "기본 텍스트3",
-  ];
+  let cameraRef = useRef();
+  const [hasCameraPermission, setHasCameraPermission] = useState(
+    Camera.requestCameraPermissionsAsync
+  );
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState(
+    MediaLibrary.PermissionStatus.UNDETERMINED
+  );
+  // CameraCapturedPicture
+  const [photo, setPhoto] = useState(
+    Camera.Constants.Type["CameraPictureOptions"]
+  );
 
-  const [imageSrc, setImageSrc] = React.useState<number>(0);
-  const [paragraph, setParagraph] = React.useState<number>(0);
+  useEffect(() => {
+    async () => {
+      const cameraPermission = await Camera.requestCameraPermissionsAsync();
+      const mediaLibraryPermission =
+        await MediaLibrary.requestPermissionsAsync();
 
-  const changeImg = (): void => {
-    if (imageSrc === 2) setImageSrc(0);
-    else setImageSrc((imageSrc) => imageSrc + 1);
+      if (cameraPermission.status === MediaLibrary.PermissionStatus.GRANTED) {
+        // 이러면 카메라 설정 허가 설정 완료.
+        return <Text>success to get Permission for using camera.</Text>;
+      }
+      if (
+        mediaLibraryPermission.status === MediaLibrary.PermissionStatus.GRANTED
+      ) {
+        // 라이브러리 접근 권한 획득
+        return <Text>success to get Permission for save photos.</Text>;
+      }
+    };
+  }, []);
+
+  // check to get permission success or fail
+  if (hasCameraPermission === undefined) {
+    return <Text>requesting Permission to access camera...</Text>;
+  } else if (!hasCameraPermission) {
+    return <Text>fail to get Permission about camera.</Text>;
+  }
+
+  if (hasMediaLibraryPermission === undefined) {
+    return <Text>requesting Permission to access library...</Text>;
+  } else if (!hasMediaLibraryPermission) {
+    return <Text>fail to get Permission access library.</Text>;
+  }
+
+  // onpress function to take photo button
+  const takePicture = async () => {
+    const options = {
+      quality: 1,
+      base64: true,
+      exif: false,
+    };
+
+    if (cameraRef === undefined) return;
+    let newPhoto = await cameraRef.current.takePictureAsync(options);
   };
-  const changeParagraph = (): void => {
-    if (paragraph === 2) setParagraph(0);
-    setParagraph((para) => para + 1);
-  };
+
+  // save photo in my local storage
+  if (photo) {
+    let sharePicutre = () => {
+      shareAsync(photo.uri).then(() => {
+        setPhoto(undefined);
+      });
+    };
+    let savePhoto = () => {
+      () => {
+        MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
+          setPhoto(undefined);
+        });
+      };
+    };
+    return (
+      <SafeAreaView>
+        <Image
+          style={styles.preview}
+          source={{ uri: "data:image/jpg;base64," + photo.base64 }}
+        />
+        <Button title="Share" onPress={sharePicutre} />
+        {hasMediaLibraryPermission ? (
+          <Button title="Save" onPress={sharePicutre} />
+        ) : undefined}
+        <Button title="Discard" onPress={() => setPhoto(undefined)} />
+      </SafeAreaView>
+    );
+  }
+
+  // default return in App
   return (
-    <View style={styles.container}>
-      <Navigation />
-      <Image style={styles.profileImage} source={imageArr[imageSrc]} />
-      <Text style={styles.textContainer}>{paragraphArr[paragraph]}</Text>
-      <Button onPress={changeImg} title="Change Image" />
-      <Button onPress={changeParagraph} title="Change Text" />
-
-      <Button
-        onPress={() => {
-          setImageSrc(0);
-          setParagraph(0);
-        }}
-        title="Reset"
-      />
-      <StatusBar style="auto" />
-    </View>
+    <Camera style={styles.mainContainer} ref={cameraRef}>
+      <View style={styles.buttonContainer}>
+        <Button title="take picture" onPress={takePicture} />
+        <StatusBar style="auto" />
+      </View>
+    </Camera>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
-  textContainer: {
+  buttonContainer: {
     flex: 1,
+    backgroundColor: "white",
+    alignSelf: "center",
   },
-  profileImage: {
-    flex: 1,
+  preview: {
+    algins: 1,
+    alignSelf: "stretch",
   },
 });
