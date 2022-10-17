@@ -30,7 +30,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "src/App.tsx"],
   "exclude": [
     "node_modules",
     "babel.config.js",
