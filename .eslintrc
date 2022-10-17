@@ -1,0 +1,6 @@
+{
+  "extends": "react-native-typescript",
+  "rules": {
+    "no-console": 2
+  }
+}
