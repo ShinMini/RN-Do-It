@@ -2,10 +2,10 @@
 
 import React, {Component} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
-import CameraScreenModel from './screen/CameraScreenModel';
-import BarcodeScreenModel from './screen/BarcodeScreenModel';
-import CameraModel from './components/CameraModel';
-import appStyles from './styles/AppStyles';
+import CameraScreenModel from './src/screen/CameraScreenModel';
+import BarcodeScreenModel from './src/screen/BarcodeScreenModel';
+import CameraModel from './src/components/CameraModel';
+import appStyles from './src/styles/AppStyles';
 
 type State = {
   model?: CameraModel | CameraScreenModel | BarcodeScreenModel;

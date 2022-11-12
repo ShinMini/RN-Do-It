@@ -14,21 +14,20 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.hyeonmini.camerademo"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png"
+    },
+    "assets": "./assets"
   }
 }

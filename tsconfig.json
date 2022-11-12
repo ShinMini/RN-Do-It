@@ -26,11 +26,11 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    // 라이브러리 *.d.ts로 설정된 파일의 type checking은 skipt함.
+    // 라이브러리 *.d.ts로 설정된 파일의 type checking은 skip함.
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "src/App.tsx"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "App.tsx"],
   "exclude": [
     "node_modules",
     "babel.config.js",
